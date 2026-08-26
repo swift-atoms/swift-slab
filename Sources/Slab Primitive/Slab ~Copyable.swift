@@ -1,10 +1,10 @@
-import Bit_Primitives
-public import Buffer_Protocol_Primitives
-public import Buffer_Slab_Primitives
-public import Index_Primitives
+import Bit
+public import Buffer_Protocol
+public import Buffer_Slab
+public import Index
 public import Memory_Allocator_Primitive
-public import Memory_Heap_Primitives
-public import Storage_Contiguous_Primitives
+public import Memory_Heap
+public import Storage_Contiguous
 
 extension __Slab where S: ~Copyable, S: Buffer.`Protocol` {
 

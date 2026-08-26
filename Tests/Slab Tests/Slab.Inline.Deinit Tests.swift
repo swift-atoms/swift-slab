@@ -1,7 +1,7 @@
 import Slab_Inline_Primitive
 import Testing
 
-@testable import Slab_Primitives
+@testable import Slab
 
 @Suite(
     .disabled(

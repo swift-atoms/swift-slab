@@ -1,4 +1,4 @@
-# Slab Primitives
+# Slab
 
 ![Development Status](https://img.shields.io/badge/status-active--development-blue.svg)
 
@@ -10,7 +10,7 @@ Add the dependency to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/swift-primitives/swift-slab-primitives.git", branch: "main")
+    .package(url: "https://github.com/swift-molecules/swift-slab.git", branch: "main")
 ]
 ```
 
@@ -20,7 +20,7 @@ Add the product to your target:
 .target(
     name: "App",
     dependencies: [
-        .product(name: "Slab Primitives", package: "swift-slab-primitives")
+        .product(name: "Slab", package: "swift-slab")
     ]
 )
 ```

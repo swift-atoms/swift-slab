@@ -1,6 +1,6 @@
 import Testing
 
-@testable import Slab_Primitives
+@testable import Slab
 
 private struct SplitMix64: RandomNumberGenerator {
     var state: UInt64

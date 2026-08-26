@@ -1,12 +1,12 @@
-import Bit_Primitives
+import Bit
 public import Buffer_Primitive
-public import Buffer_Slab_Inline_Primitives
-public import Finite_Bounded_Primitives
-public import Index_Primitives
+public import Buffer_Slab_Inline
+public import Finite_Bounded
+public import Index
 public import Memory_Allocator_Primitive
-public import Memory_Heap_Primitives
+public import Memory_Heap
 public import Slab_Primitive
-public import Storage_Contiguous_Primitives
+public import Storage_Contiguous
 
 extension __Slab where S: ~Copyable {
 

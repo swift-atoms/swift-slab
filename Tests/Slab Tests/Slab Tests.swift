@@ -1,6 +1,6 @@
 import Testing
 
-@testable import Slab_Primitives
+@testable import Slab
 
 @Suite
 struct `Slab Tests` {

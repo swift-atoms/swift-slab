@@ -1,7 +1,7 @@
-import Finite_Bounded_Primitives
-import Index_Primitives
+import Finite_Bounded
+import Index
 import Slab_Inline_Primitive
-import Slab_Primitives
+import Slab
 import Testing
 
 @Suite(
