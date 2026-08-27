@@ -16,8 +16,19 @@ struct `Slab Tests` {
     }
 
     @Test
+    func `take transfers a move-only column`() {
+        let slab = __Slab(column: MoveOnlyColumn(value: 42))
+        let column = slab.take()
+        #expect(column.value == 42)
+    }
+
+    @Test
     func `errors are equatable and distinct`() {
         #expect(__Slab<Int>.Error.full == .full)
         #expect(__Slab<Int>.Error.vacant != .occupied)
     }
+}
+
+private struct MoveOnlyColumn: ~Copyable {
+    let value: Int
 }
