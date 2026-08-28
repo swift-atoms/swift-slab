@@ -12,40 +12,161 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(
-            name: "Slab",
-            targets: ["Slab"]
+
+        .library(name: "Slab Primitive", targets: ["Slab Primitive"]),
+        .library(name: "Slab", targets: ["Slab"]),
+
+        .library(name: "Slab Inline Primitive", targets: ["Slab Inline Primitive"]),
+
+        .library(name: "Slab Test Support", targets: ["Slab Test Support"]),
+    ],
+    dependencies: [
+        .package(
+            url: "https://github.com/swift-molecules/swift-index.git",
+            branch: "main"
         ),
-        .library(
-            name: "Slab Standard Library Integration",
-            targets: ["Slab Standard Library Integration"]
+        .package(
+            url: "https://github.com/swift-molecules/swift-finite.git",
+            branch: "main"
         ),
-        .library(
-            name: "Slab Apple Foundation Integration",
-            targets: ["Slab Apple Foundation Integration"]
+        .package(
+            url: "https://github.com/swift-molecules/swift-bit.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-collection.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-sequence.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-buffer.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-buffer-slab.git",
+            branch: "main"
+        ),
+
+        .package(
+            url: "https://github.com/swift-molecules/swift-storage.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-memory-heap.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-memory-allocation.git",
+            branch: "main"
         ),
     ],
-    dependencies: [],
     targets: [
+
         .target(
-            name: "Slab",
-            dependencies: []
-        ),
-        .target(
-            name: "Slab Standard Library Integration",
-            dependencies: ["Slab"]
-        ),
-        .target(
-            name: "Slab Apple Foundation Integration",
+            name: "Slab Primitive",
             dependencies: [
-                "Slab",
-                "Slab Standard Library Integration",
+
+                .product(name: "Buffer Protocol", package: "swift-buffer"),
+
+                .product(name: "Bit", package: "swift-bit"),
+                .product(name: "Buffer Slab", package: "swift-buffer-slab"),
+                .product(name: "Index", package: "swift-index"),
+                .product(
+                    name: "Storage Contiguous",
+                    package: "swift-storage"
+                ),
+                .product(name: "Memory Heap", package: "swift-memory-heap"),
+                .product(
+                    name: "Memory Allocator Primitive",
+                    package: "swift-memory-allocation"
+                ),
             ]
         ),
+
+        .target(
+            name: "Slab Inline Primitive",
+            dependencies: [
+                "Slab Primitive",
+                .product(name: "Buffer Primitive", package: "swift-buffer"),
+                .product(
+                    name: "Buffer Slab Inline",
+                    package: "swift-buffer-slab"
+                ),
+                .product(name: "Bit", package: "swift-bit"),
+                .product(name: "Finite Bounded", package: "swift-finite"),
+                .product(name: "Index", package: "swift-index"),
+                .product(
+                    name: "Storage Contiguous",
+                    package: "swift-storage"
+                ),
+                .product(name: "Memory Heap", package: "swift-memory-heap"),
+                .product(
+                    name: "Memory Allocator Primitive",
+                    package: "swift-memory-allocation"
+                ),
+            ]
+        ),
+
+        .target(
+            name: "Slab",
+            dependencies: [
+                "Slab Primitive",
+                .product(name: "Bit", package: "swift-bit"),
+                .product(name: "Buffer Slab", package: "swift-buffer-slab"),
+                .product(name: "Index", package: "swift-index"),
+                .product(name: "Sequence", package: "swift-sequence"),
+                .product(
+                    name: "Storage Contiguous",
+                    package: "swift-storage"
+                ),
+                .product(name: "Memory Heap", package: "swift-memory-heap"),
+                .product(
+                    name: "Memory Allocator Primitive",
+                    package: "swift-memory-allocation"
+                ),
+            ]
+        ),
+
         .testTarget(
             name: "Slab Tests",
-            dependencies: ["Slab"],
-            path: "Tests/Slab Tests"
+            dependencies: [
+                "Slab",
+                "Slab Inline Primitive",
+                .product(
+                    name: "Buffer Test Support",
+                    package: "swift-buffer"
+                ),
+                .product(name: "Index Test Support", package: "swift-index"),
+            ]
+        ),
+
+        .target(
+            name: "Slab Test Support",
+            dependencies: [
+                "Slab",
+                .product(name: "Index Test Support", package: "swift-index"),
+                .product(
+                    name: "Finite Test Support",
+                    package: "swift-finite"
+                ),
+                .product(name: "Bit Test Support", package: "swift-bit"),
+                .product(
+                    name: "Buffer Test Support",
+                    package: "swift-buffer"
+                ),
+                .product(
+                    name: "Collection Test Support",
+                    package: "swift-collection"
+                ),
+                .product(
+                    name: "Sequence Test Support",
+                    package: "swift-sequence"
+                ),
+            ],
+            path: "Tests/Support"
         ),
     ],
     swiftLanguageModes: [.v6]

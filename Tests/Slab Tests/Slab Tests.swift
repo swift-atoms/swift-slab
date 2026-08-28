@@ -9,82 +9,191 @@ struct `Slab Tests` {
     @Suite struct Integration {}
 
     @Test
-    func `init stores the column and take returns it`() {
-        let slab = __Slab<Int>(column: 42)
-        let column = slab.take()
-        #expect(column == 42)
+    func `init creates empty slab`() {
+        let slab = Slab<Int>()
+        let empty = slab.isEmpty
+        let occ = slab.occupancy
+        #expect(empty == true)
+        #expect(occ == .zero)
     }
 
     @Test
-    func `take transfers a move-only column`() {
-        let slab = __Slab(column: MoveOnlyColumn(value: 42))
-        let column = slab.take()
-        #expect(column.value == 42)
+    func `init with minimum capacity`() {
+        let slab = Slab<Int>(minimumCapacity: 10)
+        let empty = slab.isEmpty
+        let occ = slab.occupancy
+        #expect(empty == true)
+        #expect(occ == .zero)
     }
 
     @Test
-    func `integrations can borrow and mutate a copyable column`() {
-        var slab = __Slab(column: 42)
+    func `insert at index roundtrip`() throws {
+        var slab = Slab<Int>(minimumCapacity: 3)
+        let index: Index<Int> = 0
+        try slab.insert(42, at: index)
 
-        let original = slab.withColumn { $0 }
-        slab.withMutableColumn { $0 = 43 }
-        let updated = slab.withColumn { $0 }
+        let occupied = slab.isOccupied(at: index)
+        let occ = slab.occupancy
+        #expect(occupied == true)
+        #expect(occ == 1)
 
-        #expect(original == 42)
-        #expect(updated == 43)
+        let removed = try slab.remove(at: index)
+        let empty = slab.isEmpty
+        #expect(removed == 42)
+        #expect(empty == true)
     }
 
     @Test
-    func `integrations can borrow and mutate a move-only column`() {
-        var slab = __Slab(column: MoveOnlyColumn(value: 42))
+    func `insert auto finds first vacant`() throws {
+        var slab = Slab<Int>(minimumCapacity: 3)
+        let i0 = try slab.insert(10)
+        let i1 = try slab.insert(20)
+        let i2 = try slab.insert(30)
 
-        let original = slab.withColumn { $0.value }
-        slab.withMutableColumn { $0.value = 43 }
-        let updated = slab.withColumn { $0.value }
-
-        #expect(original == 42)
-        #expect(updated == 43)
+        let occ = slab.occupancy
+        #expect(occ == 3)
+        let r0 = try slab.remove(at: i0)
+        let r1 = try slab.remove(at: i1)
+        let r2 = try slab.remove(at: i2)
+        #expect(r0 == 10)
+        #expect(r1 == 20)
+        #expect(r2 == 30)
+        let empty = slab.isEmpty
+        #expect(empty == true)
     }
 
     @Test
-    func `mutable access can return a move-only value`() {
-        var slab = __Slab(column: MoveOnlyColumn(value: 42))
+    func `insert occupied throws`() throws {
+        var slab = Slab<Int>(minimumCapacity: 1)
+        let index = try slab.insert(42)
 
-        let original = slab.withMutableColumn { column in
-            let original = consume column
-            column = MoveOnlyColumn(value: 43)
-            return consume original
+        #expect(throws: Slab<Int>.Error.occupied) {
+            try slab.insert(99, at: index)
         }
-        let updated = slab.withColumn { $0.value }
-
-        #expect(original.value == 42)
-        #expect(updated == 43)
     }
 
     @Test
-    func `mutable access can transfer a move-only input and result`() {
-        var slab = __Slab(column: MoveOnlyColumn(value: 42))
+    func `insert full throws`() throws {
+        var slab = Slab<Int>(minimumCapacity: 1)
+        _ = try slab.insert(42)
 
-        let original = slab.withMutableColumn(MoveOnlyColumn(value: 43)) {
-            column,
-            replacement in
-            let original = consume column
-            column = consume replacement
-            return consume original
+        #expect(throws: Slab<Int>.Error.full) {
+            try slab.insert(99)
         }
-        let updated = slab.withColumn { $0.value }
-
-        #expect(original.value == 42)
-        #expect(updated == 43)
     }
 
     @Test
-    func `errors are equatable and distinct`() {
-        #expect(__Slab<Int>.Error.full == .full)
-        #expect(__Slab<Int>.Error.vacant != .occupied)
-    }
-}
+    func `remove vacant throws`() {
+        var slab = Slab<Int>(minimumCapacity: 1)
+        let index: Index<Int> = 0
 
-private struct MoveOnlyColumn: ~Copyable {
-    var value: Int
+        #expect(throws: Slab<Int>.Error.vacant) {
+            try slab.remove(at: index)
+        }
+    }
+
+    @Test
+    func `update swaps element`() throws {
+        var slab = Slab<Int>(minimumCapacity: 1)
+        let index = try slab.insert(42)
+
+        let old = try slab.update(at: index, with: 99)
+        #expect(old == 42)
+
+        let current = try slab.remove(at: index)
+        #expect(current == 99)
+    }
+
+    @Test
+    func `update vacant throws`() {
+        var slab = Slab<Int>(minimumCapacity: 1)
+        let index: Index<Int> = 0
+
+        #expect(throws: Slab<Int>.Error.vacant) {
+            try slab.update(at: index, with: 42)
+        }
+    }
+
+    @Test
+    func `peek returns element without removing`() throws {
+        var slab = Slab<Int>(minimumCapacity: 1)
+        let index = try slab.insert(42)
+
+        let peeked = slab.peek(at: index)
+        let occupied = slab.isOccupied(at: index)
+        #expect(peeked == 42)
+        #expect(occupied == true)
+    }
+
+    @Test
+    func `peek vacant returns nil`() {
+        let slab = Slab<Int>(minimumCapacity: 1)
+        let index: Index<Int> = 0
+        let peeked = slab.peek(at: index)
+        #expect(peeked == nil)
+    }
+
+    @Test
+    func `firstVacant returns first empty slot`() throws {
+        var slab = Slab<Int>(minimumCapacity: 3)
+        let i0 = try slab.insert(10)
+        _ = try slab.insert(20)
+
+        _ = try slab.remove(at: i0)
+
+        let vacant = slab.firstVacant()
+        #expect(vacant == i0)
+    }
+
+    @Test
+    func `isFull when all slots occupied`() throws {
+        var slab = Slab<Int>(minimumCapacity: 2)
+
+        while !slab.isFull() {
+
+            slab.insert(0, __unchecked: slab.firstVacant()!)
+        }
+        let full = slab.isFull()
+        let vacant = slab.firstVacant()
+        #expect(full == true)
+        #expect(vacant == nil)
+    }
+
+    @Test
+    func `slot reuse after removal`() throws {
+        var slab = Slab<Int>(minimumCapacity: 4)
+        let slot = try slab.insert(10)
+        _ = try slab.remove(at: slot)
+        try slab.insert(20, at: slot)
+        let removed = try slab.remove(at: slot)
+        #expect(removed == 20)
+    }
+
+    @Test
+    func `removeAll clears all slots`() throws {
+        var slab = Slab<Int>(minimumCapacity: 3)
+        _ = try slab.insert(10)
+        _ = try slab.insert(20)
+        _ = try slab.insert(30)
+
+        slab.removeAll()
+        let empty = slab.isEmpty
+        let occ = slab.occupancy
+        #expect(empty == true)
+        #expect(occ == .zero)
+    }
+
+    @Test
+    func `drain removes all elements`() throws {
+        var slab = Slab<Int>(minimumCapacity: 3)
+        _ = try slab.insert(10)
+        _ = try slab.insert(20)
+        _ = try slab.insert(30)
+
+        var drained: [Int] = []
+        slab.drain { drained.append($0) }
+        let empty = slab.isEmpty
+        #expect(empty == true)
+        #expect(drained.sorted() == [10, 20, 30])
+    }
 }
