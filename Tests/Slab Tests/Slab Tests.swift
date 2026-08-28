@@ -23,6 +23,30 @@ struct `Slab Tests` {
     }
 
     @Test
+    func `integrations can borrow and mutate a copyable column`() {
+        var slab = __Slab(column: 42)
+
+        let original = slab.withColumn { $0 }
+        slab.withMutableColumn { $0 = 43 }
+        let updated = slab.withColumn { $0 }
+
+        #expect(original == 42)
+        #expect(updated == 43)
+    }
+
+    @Test
+    func `integrations can borrow and mutate a move-only column`() {
+        var slab = __Slab(column: MoveOnlyColumn(value: 42))
+
+        let original = slab.withColumn { $0.value }
+        slab.withMutableColumn { $0.value = 43 }
+        let updated = slab.withColumn { $0.value }
+
+        #expect(original == 42)
+        #expect(updated == 43)
+    }
+
+    @Test
     func `errors are equatable and distinct`() {
         #expect(__Slab<Int>.Error.full == .full)
         #expect(__Slab<Int>.Error.vacant != .occupied)
@@ -30,5 +54,5 @@ struct `Slab Tests` {
 }
 
 private struct MoveOnlyColumn: ~Copyable {
-    let value: Int
+    var value: Int
 }
