@@ -21,6 +21,18 @@ public struct __Slab<S: ~Copyable>: ~Copyable {
     ) throws(Failure) -> R {
         try body(&column)
     }
+
+    @inlinable
+    public mutating func withMutableColumn<
+        Value: ~Copyable,
+        R: ~Copyable,
+        Failure: Swift.Error
+    >(
+        _ value: consuming Value,
+        _ body: (inout S, consuming Value) throws(Failure) -> R
+    ) throws(Failure) -> R {
+        try body(&column, consume value)
+    }
 }
 
 extension __Slab where S: ~Copyable {

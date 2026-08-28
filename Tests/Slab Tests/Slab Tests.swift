@@ -62,6 +62,23 @@ struct `Slab Tests` {
     }
 
     @Test
+    func `mutable access can transfer a move-only input and result`() {
+        var slab = __Slab(column: MoveOnlyColumn(value: 42))
+
+        let original = slab.withMutableColumn(MoveOnlyColumn(value: 43)) {
+            column,
+            replacement in
+            let original = consume column
+            column = consume replacement
+            return consume original
+        }
+        let updated = slab.withColumn { $0.value }
+
+        #expect(original.value == 42)
+        #expect(updated == 43)
+    }
+
+    @Test
     func `errors are equatable and distinct`() {
         #expect(__Slab<Int>.Error.full == .full)
         #expect(__Slab<Int>.Error.vacant != .occupied)
