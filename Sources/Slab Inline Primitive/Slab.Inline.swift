@@ -2,7 +2,7 @@ public import Buffer_Primitive
 public import Buffer_Protocol
 public import Buffer_Slab_Inline
 public import Memory_Allocator_Primitive
-public import Memory_Heap
+public import Memory
 public import Slab_Primitive
 public import Storage_Contiguous
 

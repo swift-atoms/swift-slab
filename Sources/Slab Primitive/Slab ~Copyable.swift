@@ -3,7 +3,7 @@ public import Buffer_Protocol
 public import Buffer_Slab
 public import Index
 public import Memory_Allocator_Primitive
-public import Memory_Heap
+public import Memory
 public import Storage_Contiguous
 
 extension __Slab where S: ~Copyable, S: Buffer.`Protocol` {

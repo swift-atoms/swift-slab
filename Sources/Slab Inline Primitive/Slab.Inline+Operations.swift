@@ -4,7 +4,7 @@ public import Buffer_Slab_Inline
 public import Finite_Bounded
 public import Index
 public import Memory_Allocator_Primitive
-public import Memory_Heap
+public import Memory
 public import Slab_Primitive
 public import Storage_Contiguous
 

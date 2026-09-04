@@ -1,6 +1,6 @@
 public import Buffer_Slab
 public import Memory_Allocator_Primitive
-public import Memory_Heap
+public import Memory
 public import Storage_Contiguous
 
 extension __Slab where S: ~Copyable {

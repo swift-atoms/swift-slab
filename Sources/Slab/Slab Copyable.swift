@@ -2,7 +2,7 @@ import Bit
 public import Buffer_Slab
 public import Index
 public import Memory_Allocator_Primitive
-public import Memory_Heap
+public import Memory
 public import Slab_Primitive
 public import Storage_Contiguous
 
