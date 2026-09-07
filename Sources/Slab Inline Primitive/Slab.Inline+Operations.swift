@@ -1,7 +1,7 @@
 import Bit
 public import Buffer_Primitive
 public import Buffer_Slab_Inline
-public import Finite_Bounded
+public import Finite
 public import Index
 public import Memory_Allocator_Primitive
 public import Memory

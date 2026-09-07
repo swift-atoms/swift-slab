@@ -69,7 +69,7 @@ let package = Package(
             name: "Slab Primitive",
             dependencies: [
 
-                .product(name: "Buffer Protocol", package: "swift-buffer"),
+                .product(name: "Buffer", package: "swift-buffer"),
 
                 .product(name: "Bit", package: "swift-bit"),
                 .product(name: "Buffer Slab", package: "swift-buffer-slab"),
@@ -96,7 +96,7 @@ let package = Package(
                     package: "swift-buffer-slab"
                 ),
                 .product(name: "Bit", package: "swift-bit"),
-                .product(name: "Finite Bounded", package: "swift-finite"),
+                .product(name: "Finite", package: "swift-finite"),
                 .product(name: "Index", package: "swift-index"),
                 .product(
                     name: "Storage Contiguous",

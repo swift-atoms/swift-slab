@@ -1,5 +1,5 @@
 import Bit
-public import Buffer_Protocol
+public import Buffer
 public import Buffer_Slab
 public import Index
 public import Memory_Allocator_Primitive

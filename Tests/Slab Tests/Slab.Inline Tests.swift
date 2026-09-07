@@ -1,4 +1,4 @@
-import Finite_Bounded
+import Finite
 import Index
 import Slab_Inline_Primitive
 import Slab
