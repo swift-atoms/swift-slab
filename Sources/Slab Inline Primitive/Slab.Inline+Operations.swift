@@ -1,5 +1,5 @@
 import Bit
-public import Buffer_Primitive
+public import Buffer
 public import Buffer_Slab_Inline
 public import Finite
 public import Index

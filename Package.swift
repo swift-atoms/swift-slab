@@ -42,7 +42,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-buffer.git",
+            url: "https://github.com/swift-atoms/swift-buffer.git",
             branch: "main"
         ),
         .package(
@@ -90,7 +90,7 @@ let package = Package(
             name: "Slab Inline Primitive",
             dependencies: [
                 "Slab Primitive",
-                .product(name: "Buffer Primitive", package: "swift-buffer"),
+                .product(name: "Buffer", package: "swift-buffer"),
                 .product(
                     name: "Buffer Slab Inline",
                     package: "swift-buffer-slab"
