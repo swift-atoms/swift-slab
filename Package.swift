@@ -27,7 +27,8 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/swift-molecules/swift-finite.git",
-            branch: "main"
+            branch: "main",
+            traits: ["Tagged"]
         ),
         .package(
             url: "https://github.com/swift-molecules/swift-bit.git",
