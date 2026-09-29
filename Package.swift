@@ -21,6 +21,7 @@ let package = Package(
         .library(name: "Slab Test Support", targets: ["Slab Test Support"]),
     ],
     dependencies: [
+        .package(url: "https://github.com/swift-atoms/swift-ratio.git", branch: "main", traits: ["Bit", "Ordinal", "Difference"]),
         .package(
             url: "https://github.com/swift-atoms/swift-index.git",
             branch: "main"
