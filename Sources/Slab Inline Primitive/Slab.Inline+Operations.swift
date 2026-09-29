@@ -3,10 +3,10 @@ public import Buffer
 public import Buffer_Slab_Inline
 public import Finite
 public import Index
-public import Memory_Allocator_Primitive
+public import Memory_Allocator
 public import Memory
 public import Slab_Primitive
-public import Storage_Contiguous
+public import Storage
 
 extension __Slab where S: ~Copyable {
 

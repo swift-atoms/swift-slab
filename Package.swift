@@ -22,24 +22,23 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-molecules/swift-index.git",
+            url: "https://github.com/swift-atoms/swift-index.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-finite.git",
-            branch: "main",
-            traits: ["Tagged"]
+            url: "https://github.com/swift-atoms/swift-finite.git",
+            branch: "main", traits: ["Tagged"]
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-bit.git",
+            url: "https://github.com/swift-atoms/swift-bit.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-collection.git",
+            url: "https://github.com/swift-atoms/swift-collection.git",
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-molecules/swift-sequence.git",
+            url: "https://github.com/swift-atoms/swift-sequence.git",
             branch: "main"
         ),
         .package(
@@ -52,9 +51,9 @@ let package = Package(
         ),
 
         .package(
-            url: "https://github.com/swift-molecules/swift-storage.git",
+            url: "https://github.com/swift-atoms/swift-storage.git",
             branch: "main"
-        ),
+        , traits: ["Memory"]),
         .package(
             url: "https://github.com/swift-atoms/swift-memory.git",
             branch: "main"
@@ -63,6 +62,11 @@ let package = Package(
             url: "https://github.com/swift-molecules/swift-memory-allocation.git",
             branch: "main"
         ),
+
+        .package(url: "https://github.com/swift-atoms/swift-cardinal.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-ordinal.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-tagged.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-store.git", branch: "main"),
     ],
     targets: [
 
@@ -76,12 +80,12 @@ let package = Package(
                 .product(name: "Buffer Slab", package: "swift-buffer-slab"),
                 .product(name: "Index", package: "swift-index"),
                 .product(
-                    name: "Storage Contiguous",
+                    name: "Storage",
                     package: "swift-storage"
                 ),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(
-                    name: "Memory Allocator Primitive",
+                    name: "Memory Allocator",
                     package: "swift-memory-allocation"
                 ),
             ]
@@ -100,12 +104,12 @@ let package = Package(
                 .product(name: "Finite", package: "swift-finite"),
                 .product(name: "Index", package: "swift-index"),
                 .product(
-                    name: "Storage Contiguous",
+                    name: "Storage",
                     package: "swift-storage"
                 ),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(
-                    name: "Memory Allocator Primitive",
+                    name: "Memory Allocator",
                     package: "swift-memory-allocation"
                 ),
             ]
@@ -120,12 +124,12 @@ let package = Package(
                 .product(name: "Index", package: "swift-index"),
                 .product(name: "Sequence", package: "swift-sequence"),
                 .product(
-                    name: "Storage Contiguous",
+                    name: "Storage",
                     package: "swift-storage"
                 ),
                 .product(name: "Memory", package: "swift-memory"),
                 .product(
-                    name: "Memory Allocator Primitive",
+                    name: "Memory Allocator",
                     package: "swift-memory-allocation"
                 ),
             ]
@@ -169,6 +173,8 @@ let package = Package(
             ],
             path: "Tests/Support"
         ),
+
+        .testTarget(name: "Decision Slab Integration Tests", dependencies: ["Slab", .product(name: "Cardinal", package: "swift-cardinal"), .product(name: "Ordinal", package: "swift-ordinal"), .product(name: "Tagged", package: "swift-tagged"), .product(name: "Index", package: "swift-index"), .product(name: "Storage", package: "swift-storage"), .product(name: "Store", package: "swift-store"), .product(name: "Buffer", package: "swift-buffer"), "Slab Inline Primitive", .product(name: "Finite", package: "swift-finite")], path: "Tests/Decision Slab Integration Tests"),
     ],
     swiftLanguageModes: [.v6]
 )

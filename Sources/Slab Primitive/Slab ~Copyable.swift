@@ -2,9 +2,9 @@ import Bit
 public import Buffer
 public import Buffer_Slab
 public import Index
-public import Memory_Allocator_Primitive
+public import Memory_Allocator
 public import Memory
-public import Storage_Contiguous
+public import Storage
 
 extension __Slab where S: ~Copyable, S: Buffer.`Protocol` {
 
