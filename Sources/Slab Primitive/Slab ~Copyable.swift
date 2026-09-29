@@ -3,6 +3,7 @@ public import Buffer
 public import Buffer_Slab
 public import Index
 public import Memory_Allocator
+public import Memory_Allocator_Protocol
 public import Memory
 public import Storage
 

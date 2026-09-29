@@ -88,6 +88,7 @@ let package = Package(
                     name: "Memory Allocator",
                     package: "swift-memory-allocation"
                 ),
+                .product(name: "Memory Allocator Protocol", package: "swift-memory-allocation"),
             ]
         ),
 

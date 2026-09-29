@@ -30,13 +30,13 @@ extension __Slab where S: ~Copyable {
     @inlinable
     public func isOccupied<E: ~Copyable, let n: Int>(at index: Index<E>.Bounded<n>) -> Bool
     where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        column.isOccupied(at: index.retag(Bit.self))
+        column.isOccupied(at: Index<Bit>(index.retag(Bit.self)))
     }
 
     @inlinable
     public func firstVacant<E: ~Copyable, let n: Int>() -> Index<E>.Bounded<n>?
     where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        column.firstVacant()?.retag(E.self)
+        column.firstVacant().flatMap { Index<E>.Bounded<n>($0.retag(E.self)) }
     }
 }
 
@@ -48,7 +48,7 @@ extension __Slab where S: ~Copyable {
         at index: Index<E>.Bounded<n>
     ) throws(Error)
     where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        let slot = index.retag(Bit.self)
+        let slot = Index<Bit>(index.retag(Bit.self))
         guard !column.isOccupied(at: slot) else { throw .occupied }
         column.insert(consume element, at: slot)
     }
@@ -58,7 +58,7 @@ extension __Slab where S: ~Copyable {
         _ element: consuming E,
         __unchecked index: Index<E>.Bounded<n>
     ) where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        column.insert(consume element, at: index.retag(Bit.self))
+        column.insert(consume element, at: Index<Bit>(index.retag(Bit.self)))
     }
 
     @inlinable
@@ -66,7 +66,7 @@ extension __Slab where S: ~Copyable {
         at index: Index<E>.Bounded<n>
     ) throws(Error) -> E
     where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        let slot = index.retag(Bit.self)
+        let slot = Index<Bit>(index.retag(Bit.self))
         guard column.isOccupied(at: slot) else { throw .vacant }
         return column.remove(at: slot)
     }
@@ -75,7 +75,7 @@ extension __Slab where S: ~Copyable {
     public mutating func remove<E: ~Copyable, let n: Int>(
         __unchecked index: Index<E>.Bounded<n>
     ) -> E where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        column.remove(at: index.retag(Bit.self))
+        column.remove(at: Index<Bit>(index.retag(Bit.self)))
     }
 }
 
@@ -88,7 +88,7 @@ extension __Slab where S: ~Copyable {
     ) throws(Error) -> Index<E>.Bounded<n>
     where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
         guard let slot: Index<E>.Bounded<n> = firstVacant() else { throw .full }
-        column.insert(consume element, at: slot.retag(Bit.self))
+        column.insert(consume element, at: Index<Bit>(slot.retag(Bit.self)))
         return slot
     }
 
@@ -98,7 +98,7 @@ extension __Slab where S: ~Copyable {
         with element: consuming E
     ) throws(Error) -> E
     where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        let slot = index.retag(Bit.self)
+        let slot = Index<Bit>(index.retag(Bit.self))
         guard column.isOccupied(at: slot) else { throw .vacant }
         return column.update(at: slot, with: consume element)
     }
@@ -115,7 +115,7 @@ extension __Slab where S: ~Copyable {
     @inlinable
     public func peek<E, let n: Int>(at index: Index<E>.Bounded<n>) -> E?
     where S == Buffer<Storage<Memory.Allocator<Memory.Heap>>.Contiguous<E>>.Slab.Inline<n> {
-        let slot = index.retag(Bit.self)
+        let slot = Index<Bit>(index.retag(Bit.self))
         guard column.isOccupied(at: slot) else { return nil }
         return column.peek(at: slot)
     }
