@@ -96,7 +96,7 @@ let package = Package(
         .target(
             name: "Slab Inline Primitive",
             dependencies: [
-                "Slab Primitive",
+                .target(name: "Slab Primitive"),
                 .product(name: "Buffer", package: "swift-buffer"),
                 .product(
                     name: "Buffer Slab Inline",
@@ -120,7 +120,7 @@ let package = Package(
         .target(
             name: "Slab",
             dependencies: [
-                "Slab Primitive",
+                .target(name: "Slab Primitive"),
                 .product(name: "Bit", package: "swift-bit"),
                 .product(name: "Buffer Slab", package: "swift-buffer-slab"),
                 .product(name: "Index", package: "swift-index"),
@@ -140,8 +140,8 @@ let package = Package(
         .testTarget(
             name: "Slab Tests",
             dependencies: [
-                "Slab",
-                "Slab Inline Primitive",
+                .target(name: "Slab"),
+                .target(name: "Slab Inline Primitive"),
                 .product(
                     name: "Buffer Test Support",
                     package: "swift-buffer"
@@ -153,7 +153,7 @@ let package = Package(
         .target(
             name: "Slab Test Support",
             dependencies: [
-                "Slab",
+                .target(name: "Slab"),
                 .product(name: "Index Test Support", package: "swift-index"),
                 .product(
                     name: "Finite Test Support",
@@ -176,23 +176,20 @@ let package = Package(
             path: "Tests/Support"
         ),
 
-        .testTarget(name: "Decision Slab Integration Tests", dependencies: ["Slab", .product(name: "Cardinal", package: "swift-cardinal"), .product(name: "Ordinal", package: "swift-ordinal"), .product(name: "Tagged", package: "swift-tagged"), .product(name: "Index", package: "swift-index"), .product(name: "Storage", package: "swift-storage"), .product(name: "Store", package: "swift-store"), .product(name: "Buffer", package: "swift-buffer"), "Slab Inline Primitive", .product(name: "Finite", package: "swift-finite")], path: "Tests/Decision Slab Integration Tests"),
+        .testTarget(name: "Decision Slab Integration Tests", dependencies: [.target(name: "Slab"), .product(name: "Cardinal", package: "swift-cardinal"), .product(name: "Ordinal", package: "swift-ordinal"), .product(name: "Tagged", package: "swift-tagged"), .product(name: "Index", package: "swift-index"), .product(name: "Storage", package: "swift-storage"), .product(name: "Store", package: "swift-store"), .product(name: "Buffer", package: "swift-buffer"), .target(name: "Slab Inline Primitive"), .product(name: "Finite", package: "swift-finite")], path: "Tests/Decision Slab Integration Tests"),
     ],
     swiftLanguageModes: [.v6]
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    let ecosystem: [SwiftSetting] = [
+    target.swiftSettings = (target.swiftSettings ?? []) + [
         .strictMemorySafety(),
         .enableUpcomingFeature("ExistentialAny"),
         .enableUpcomingFeature("InternalImportsByDefault"),
         .enableUpcomingFeature("MemberImportVisibility"),
         .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableExperimentalFeature("Lifetimes"),
         .enableUpcomingFeature("InferIsolatedConformances"),
+        .enableExperimentalFeature("Lifetimes"),
+        .treatAllWarnings(as: .error),
     ]
-
-    let package: [SwiftSetting] = []
-
-    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
 }
