@@ -1,12 +1,11 @@
-import Slab_Inline_Primitive
-import Finite
-import Testing
 import Cardinal
-import Tagged
-import Ordinal
-
-import Slab
+import Finite
 import Index
+import Ordinal
+import Slab
+import Slab_Inline_Primitive
+import Tagged
+import Testing
 
 private struct SplitMix64: RandomNumberGenerator {
     var state: UInt64

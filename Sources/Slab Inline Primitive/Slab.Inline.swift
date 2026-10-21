@@ -1,8 +1,7 @@
 public import Buffer
-public import Buffer
 public import Buffer_Slab_Inline
-public import Memory_Allocator
 public import Memory
+public import Memory_Allocator
 public import Slab_Primitive
 public import Storage
 

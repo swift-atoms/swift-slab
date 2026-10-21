@@ -1,13 +1,12 @@
-import Slab_Inline_Primitive
-import Finite
-import Testing
 import Cardinal
-import Ordinal
-import Tagged
-import Storage
-
-import Slab
+import Finite
 import Index
+import Ordinal
+import Slab
+import Slab_Inline_Primitive
+import Storage
+import Tagged
+import Testing
 
 @Suite
 struct `Slab Tests` {

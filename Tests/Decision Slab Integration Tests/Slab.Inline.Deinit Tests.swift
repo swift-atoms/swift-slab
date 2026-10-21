@@ -1,11 +1,10 @@
-import Slab_Inline_Primitive
-import Finite
-import Testing
 import Cardinal
+import Finite
 import Ordinal
-import Tagged
-
 import Slab
+import Slab_Inline_Primitive
+import Tagged
+import Testing
 
 @Suite(
     .disabled(

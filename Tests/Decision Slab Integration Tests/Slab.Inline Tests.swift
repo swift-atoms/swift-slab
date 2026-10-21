@@ -1,9 +1,9 @@
-import Slab_Inline_Primitive
+import Cardinal
 import Finite
 import Index
-import Cardinal
 import Ordinal
 import Slab
+import Slab_Inline_Primitive
 import Tagged
 import Testing
 

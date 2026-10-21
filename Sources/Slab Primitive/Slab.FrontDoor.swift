@@ -1,6 +1,6 @@
 public import Buffer_Slab
-public import Memory_Allocator
 public import Memory
+public import Memory_Allocator
 public import Storage
 
 public typealias Slab<E: ~Copyable> =

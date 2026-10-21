@@ -1,8 +1,8 @@
 import Bit
 public import Buffer_Slab
 public import Index
-public import Memory_Allocator
 public import Memory
+public import Memory_Allocator
 public import Slab_Primitive
 public import Storage
 

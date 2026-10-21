@@ -3,8 +3,8 @@ public import Buffer
 public import Buffer_Slab_Inline
 public import Finite
 public import Index
-public import Memory_Allocator
 public import Memory
+public import Memory_Allocator
 public import Slab_Primitive
 public import Storage
 
