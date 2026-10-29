@@ -20,6 +20,9 @@ let package = Package(
 
         .library(name: "Slab Test Support", targets: ["Slab Test Support"]),
     ],
+    traits: [
+        .trait(name: "SlabInlinePrimitive", description: "Slab Inline Primitive and the dependencies only it needs")
+    ],
     dependencies: [
         .package(url: "https://github.com/swift-atoms/swift-ratio.git", branch: "main", traits: ["Bit", "Ordinal", "Difference"]),
         .package(
@@ -105,7 +108,7 @@ let package = Package(
                     package: "swift-buffer-slab"
                 ),
                 .product(name: "Bit", package: "swift-bit"),
-                .product(name: "Finite", package: "swift-finite"),
+                .product(name: "Finite", package: "swift-finite", condition: .when(traits: ["SlabInlinePrimitive"])),
                 .product(name: "Index", package: "swift-index"),
                 .product(
                     name: "Storage",
@@ -159,7 +162,8 @@ let package = Package(
                 .product(name: "Index Test Support", package: "swift-index"),
                 .product(
                     name: "Finite Test Support",
-                    package: "swift-finite"
+                    package: "swift-finite",
+                    condition: .when(traits: ["SlabInlinePrimitive"])
                 ),
                 .product(name: "Bit Test Support", package: "swift-bit"),
                 .product(
